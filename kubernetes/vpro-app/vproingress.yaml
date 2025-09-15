@@ -3,16 +3,14 @@ kind: Ingress
 metadata:
   name: vpro-ingress
   annotations:
-    nginx.ingress.kubernetes.io/use-regex: "true"
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80,"HTTPS":443}]'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:368903466107:certificate/e5289dd1-0674-47bc-97b7-055cb72039ea
 spec:
-  ingressClassName: nginx
+  ingressClassName: alb
   rules:
   - host: learn-devops.duchtech.space
-  # - host: vprofile.thehkh.com
     http:
       paths:
       - path: /
@@ -22,9 +20,3 @@ spec:
             name: my-app
             port:
               number: 8080
-
-
-tls:
-    - hosts:
-        - learn-devops.duchtech.space
-      secretName: vprofile-tls
