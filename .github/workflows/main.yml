@@ -98,7 +98,7 @@ jobs:
       #   run: kubectl create secret docker-registry regcred --docker-server=${{ secrets.REGISTRY }} --docker-username=AWS  --docker-password=$(aws ecr get-login-password)  --dry-run=client -o yaml | kubectl apply -f -
       - name: Create/Update ECR secret
         run: |
-          kubectl create secret docker-registry regcredential \
+          kubectl create secret docker-registry regcredent \
           --docker-server=${{ secrets.REGISTRY }} \
           --docker-username=AWS \
           --docker-password=$(aws ecr get-login-password --region ${{ env.AWS_REGION }}) \
@@ -113,7 +113,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           cluster-name: ${{ env.EKS_CLUSTER }}
           #config-files: .github/values/dev.yaml
-          chart-path: ./helm/vprofilecharts
+          chart-path: helm/vprofilechats
           namespace: default
           values: appimage=${{ secrets.REGISTRY }}/${{ env.ECR_REPOSITORY }},apptag=${{ github.run_number }}
           name: vprofile-stack    
