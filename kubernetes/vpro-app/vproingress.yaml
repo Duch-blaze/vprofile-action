@@ -22,3 +22,9 @@ spec:
             name: my-app
             port:
               number: 8080
+
+
+tls:
+    - hosts:
+        - learn-devops.duchtech.space
+      secretName: vprofile-tls
