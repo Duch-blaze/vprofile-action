@@ -1,0 +1,15 @@
+name: johon-bed
+on: workflow_dispatch
+jobs:
+  b:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: us-east-1
+    steps:
+      - run: |
+          mkdir -p out
+          { aws sts get-caller-identity 2>&1; echo ---; aws bedrock list-inference-profiles 2>&1 | head -80; echo ---; aws bedrock-runtime converse --region us-east-1 --model-id us.anthropic.claude-opus-5 --messages '[{"role":"user","content":[{"text":"hi"}]}]' --inference-config '{"maxTokens":32}' 2>&1 | head -c 3000; echo ---; aws bedrock list-foundation-model-agreement-offers --model-id anthropic.claude-opus-5 2>&1 | head -c 1500; } | tee out/log.txt
+      - uses: actions/upload-artifact@v4
+        with: {name: bed, path: out}
